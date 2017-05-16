@@ -2,10 +2,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     //---- GLOBALS ----
     var ROUND = 1;
-
     var P1;
     var P1_TURN = 1;
-
     var P2;
     var P2_TURN = 0;
 
@@ -14,11 +12,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
             name: "Simula",
             health: 100,
             dubRage: 20,
-            defaultAttack: 18,
+            defaultAttack: [
+                16, 20
+            ],
             attacks: {
                 special_1: {
                     name: "Nasssty frog synths",
-                    attack: 25,
+                    attack: [
+                        25, 30
+                    ],
                     mannaRequired: 100
                 }
             }
@@ -26,11 +28,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
         Noisia: {
             name: "Noisia",
             health: 300,
-            defaultAttack: 12,
+            defaultAttack: [
+                10, 14
+            ],
             dubRage: 50,
             special_1: {
                 name: "Diplodocus",
-                attack: 35,
+                attack: [
+                    25, 30
+                ],
                 mannaRequired: 140
             }
         }
@@ -38,53 +44,89 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     P1 = characters.Simula;
     P2 = characters.Noisia;
+
+    console.log(P1);
+    console.log(P2);
+
     document.getElementById("p1_name").innerHTML = P1.name
     document.getElementById("p2_name").innerHTML = P2.name
     document.getElementById("p1_health").innerHTML = P1.health
     document.getElementById("p2_health").innerHTML = P2.health
 
-
-
-    document.getElementById("attack").onclick = function() {
-      console.log(P1);
-      console.log(P2);
-    }
-
-
     document.getElementById("defaultAttack").onclick = function() {
+        initRound("defaultAttack");
+    }
+
+    function initRound(attackType) {
         if (P1_TURN == 1) {
-            playMove(P1, P2);
-        } else {
-            playMove(P2, P1);
-            P1.dubRage += 20;
-            P2.dubRage += 20;
-            ROUND++;
+
+            console.log("Round: " + ROUND)
+            playMove(P1, P2, attackType);
+
+            setTimeout(function() {
+                playMoveAI(P1, P2);
+                P1.dubRage += 20;
+                P2.dubRage += 20;
+                console.log("Round Finished");
+                console.log("--------------");
+                ROUND++;
+            }, 2000);
         }
     }
 
-    //plays the move
-    function playMove(attacker, defender) {
-        var damage = attacker.defaultAttack;
-        defender.health -= damage;
+    function randomBetween(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+    }
 
-        console.log("Round: " + ROUND)
-        console.log(attacker.name + " does " + damage + " damage to " + defender.name);
-        console.log(defender.name + " health is now " + defender.health);
-        console.log("Turn over");
+    //player plays the move
+    function playMove(P1, P2, attackType) {
 
-        if (defender.health <= 0) {
-            console.log(defender.name + " is dead, game over... " + attacker.name + " won!");
+        if (attackType == "defaultAttack") {
+            var attackMin = P1.defaultAttack[0];
+            var attackMax = P1.defaultAttack[1];
+        }
+        if (attackType == "special_1") {
+            var attackMin = P1.special_1[0];
+            var attackMax = P1.special_1[1];
         }
 
+        var damage = randomBetween(attackMin, attackMax);
+        P2.health -= damage;
+
+        console.log(P1.name + " does " + damage + " damage to " + P2.name);
+        console.log(P2.name + " health is now " + P2.health);
         document.getElementById("p1_health").innerHTML = P1.health
         document.getElementById("p2_health").innerHTML = P2.health
+        console.log(P1.name + " turn over");
+        console.log("");
 
-        if (P1_TURN == 1) {
-            P1_TURN = 0;
-            P2_TURN = 1;
-        } else {
-            P1_TURN = 1;
-            P2_TURN = 0;
+        if (P2.health <= 0) {
+            console.log(P2.name + " is dead, game over... " + P1.name + " won!");
         }
+
+        P1_TURN = 0;
+        P2_TURN = 1;
+    }
+
+    //AI plays the move
+    function playMoveAI(P1, P2) {
+        //pick randome mobe then
+        var attackMin = P2.defaultAttack[0];
+        var attackMax = P2.defaultAttack[1];
+        var damage = randomBetween(attackMin, attackMax);
+        P1.health -= damage;
+
+        console.log(P2.name + " does " + damage + " damage to " + P1.name);
+        console.log(P1.name + " health is now " + P1.health);
+        document.getElementById("p1_health").innerHTML = P1.health
+        document.getElementById("p2_health").innerHTML = P2.health
+        console.log(P2.name + " turn over");
+
+        if (P1.health <= 0) {
+            console.log(P1.name + " is dead, game over... " + P2.name + " won!");
+        }
+
+        P2_TURN = 0;
+        P1_TURN = 1
     }
 });
