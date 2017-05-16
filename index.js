@@ -51,7 +51,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
     console.log("Round: " + ROUND)
     console.log(attacker.name + " does " + damage + " damage to " + defender.name);
     console.log(defender.name + " health is now " + defender.health);
-    console.log("Turn over")
+    console.log("Turn over");
+
+    if (defender.health <= 0) {
+      console.log(defender.name + " is dead, game over... " + attacker.name + " won!");
+    }
 
     if (P1_TURN == 1) {
       P1_TURN = 0;
