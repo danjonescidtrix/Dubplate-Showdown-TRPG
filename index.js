@@ -40,6 +40,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     P2 = characters.Noisia;
     document.getElementById("p1_name").innerHTML = P1.name
     document.getElementById("p2_name").innerHTML = P2.name
+    document.getElementById("p1_health").innerHTML = P1.health
+    document.getElementById("p2_health").innerHTML = P2.health
 
 
 
@@ -73,6 +75,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
         if (defender.health <= 0) {
             console.log(defender.name + " is dead, game over... " + attacker.name + " won!");
         }
+
+        document.getElementById("p1_health").innerHTML = P1.health
+        document.getElementById("p2_health").innerHTML = P2.health
 
         if (P1_TURN == 1) {
             P1_TURN = 0;
