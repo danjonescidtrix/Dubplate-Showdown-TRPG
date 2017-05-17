@@ -15,11 +15,13 @@ document.addEventListener('DOMContentLoaded', function() {
     Simula: {
       name: 'Simula',
       health: 100,
-      dubRage: 20,
-      defaultAttack: [
-        16, 20
-      ],
       attacks: {
+        defaultAttack: {
+          name: 'Standard Attack',
+          attack: [
+            10, 14
+          ]
+        },
         special1: {
           name: 'Nasssty frog synths',
           attack: [
@@ -27,22 +29,28 @@ document.addEventListener('DOMContentLoaded', function() {
           ],
           mannaRequired: 100
         }
-      }
+      },
+      dubRage: 20,
     },
     Noisia: {
       name: 'Noisia',
       health: 300,
-      defaultAttack: [
-        10, 14
-      ],
-      dubRage: 50,
-      special1: {
-        name: 'Diplodocus',
-        attack: [
-          25, 30
-        ],
-        mannaRequired: 140
-      }
+      attacks: {
+        defaultAttack: {
+          name: 'Standard Attack',
+          attack: [
+            10, 14
+          ]
+        },
+        special1: {
+          name: 'Diplodoucus',
+          attack: [
+            25, 30
+          ],
+          mannaRequired: 100
+        }
+      },
+      dubRage: 20,
     }
   };
 
@@ -59,6 +67,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.getElementById('defaultAttack').onclick = function() {
     initRound('defaultAttack');
+  };
+
+  document.getElementById('special1').onclick = function() {
+    initRound('special1');
   };
 
   function initRound(attackType) {
@@ -85,53 +97,6 @@ document.addEventListener('DOMContentLoaded', function() {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
-  //AI plays the move
-  function playMoveAI(P1, P2) {
-
-
-    //picks random move
-    var myArray = ['defaultAttack', 'special1'];
-    var attackType = myArray[Math.floor(Math.random() * myArray.length)];
-
-    var attackMin;
-    var attackMax;
-
-    //checks which attackType has been picked
-    switch (attackType) {
-      case 'defaultAttack':
-        attackMin = P2.defaultAttack[0];
-        attackMax = P2.defaultAttack[1];
-        break;
-      case 'special1':
-        attackMin = P2.special1.attack[0];
-        attackMax = P2.special1.attack[1];
-        break;
-    }
-
-    //uses move
-    var damage = randomBetween(attackMin, attackMax);
-    P1.health -= damage;
-
-    //logs changes
-    console.log(P2.name + ' does ' + damage + ' damage to ' + P1.name);
-    console.log(P1.name + ' health is now ' + P1.health);
-
-    //takes health
-    document.getElementById('p1_health').innerHTML = P1.health;
-    document.getElementById('p2_health').innerHTML = P2.health;
-
-    //ends turns
-    console.log(P2.name + ' turn over');
-
-    //checks if health < 0
-    if (P1.health <= 0) {
-      console.log(P1.name + ' is dead, game over... ' + P2.name + ' won!');
-    }
-
-    //changes turns
-    P2_TURN = 0;
-    P1_TURN = 1;
-  }
 
 
   //player plays the move
@@ -139,15 +104,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var attackMin;
     var attackMax;
+    var moveName;
+
     //checks which attackType is used
     switch (attackType) {
       case 'defaultAttack':
-        attackMin = P1.defaultAttack[0];
-        attackMax = P1.defaultAttack[1];
+        attackMin = P1.attacks.defaultAttack.attack[0];
+        attackMax = P1.attacks.defaultAttack.attack[1];
+        moveName = P1.attacks.defaultAttack.name + " (Standard)";
         break;
       case 'special1':
-        attackMin = P1.special1.attack[0];
-        attackMax = P1.special1.attack[1];
+        attackMin = P1.attacks.special1.attack[0];
+        attackMax = P1.attacks.special1.attack[1];
+        moveName = P1.attacks.special1.name + " (Special)";
         break;
     }
     //uses move
@@ -155,6 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
     P2.health -= damage;
 
     //logs changes
+    console.log(P1.name + ' uses ' + moveName);
     console.log(P1.name + ' does ' + damage + ' damage to ' + P2.name);
     console.log(P2.name + ' health is now ' + P2.health);
 
@@ -177,6 +147,58 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
 
+
+  //AI plays the move
+  function playMoveAI(P1, P2) {
+
+
+    //picks random move
+    var myArray = ['defaultAttack', 'special1'];
+    var attackType = myArray[Math.floor(Math.random() * myArray.length)];
+
+    var attackMin;
+    var attackMax;
+    var moveName;
+
+    //checks which attackType has been picked
+    switch (attackType) {
+      case 'defaultAttack':
+        attackMin = P2.attacks.defaultAttack.attack[0];
+        attackMax = P2.attacks.defaultAttack.attack[1];
+        moveName = P2.attacks.defaultAttack.name + " (Standard)";
+        break;
+      case 'special1':
+        attackMin = P2.attacks.special1.attack[0];
+        attackMax = P2.attacks.special1.attack[1];
+        moveName = P2.attacks.special1.name + " (Special)";
+        break;
+    }
+
+    //uses move
+    var damage = randomBetween(attackMin, attackMax);
+    P1.health -= damage;
+
+    //logs changes
+    console.log(P2.name + ' uses ' + moveName);
+    console.log(P2.name + ' does ' + damage + ' damage to ' + P1.name);
+    console.log(P1.name + ' health is now ' + P1.health);
+
+    //takes health
+    document.getElementById('p1_health').innerHTML = P1.health;
+    document.getElementById('p2_health').innerHTML = P2.health;
+
+    //ends turns
+    console.log(P2.name + ' turn over');
+
+    //checks if health < 0
+    if (P1.health <= 0) {
+      console.log(P1.name + ' is dead, game over... ' + P2.name + ' won!');
+    }
+
+    //changes turns
+    P2_TURN = 0;
+    P1_TURN = 1;
+  }
 
 
   //closes the bundle
