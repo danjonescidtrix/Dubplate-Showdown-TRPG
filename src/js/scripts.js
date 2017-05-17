@@ -103,8 +103,8 @@ document.addEventListener('DOMContentLoaded', function() {
         attackMax = P2.defaultAttack[1];
         break;
       case 'special1':
-        attackMin = P2.special1[0];
-        attackMax = P2.special1[1];
+        attackMin = P2.special1.attack[0];
+        attackMax = P2.special1.attack[1];
         break;
     }
 
@@ -146,8 +146,8 @@ document.addEventListener('DOMContentLoaded', function() {
         attackMax = P1.defaultAttack[1];
         break;
       case 'special1':
-        attackMin = P1.special1[0];
-        attackMax = P1.special1[1];
+        attackMin = P1.special1.attack[0];
+        attackMax = P1.special1.attack[1];
         break;
     }
     //uses move
