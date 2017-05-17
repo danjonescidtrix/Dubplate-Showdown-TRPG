@@ -20,17 +20,18 @@ document.addEventListener('DOMContentLoaded', function() {
           name: 'Standard Attack',
           attack: [
             10, 14
-          ]
+          ],
+          dubRageRequired: 0
         },
         special1: {
           name: 'Nasssty frog synths',
           attack: [
             25, 30
           ],
-          mannaRequired: 100
+          dubRageRequired: 50
         }
       },
-      dubRage: 20,
+      dubRage: 0,
     },
     Noisia: {
       name: 'Noisia',
@@ -40,25 +41,23 @@ document.addEventListener('DOMContentLoaded', function() {
           name: 'Standard Attack',
           attack: [
             10, 14
-          ]
+          ],
+          dubRageRequired: 0
         },
         special1: {
           name: 'Diplodoucus',
           attack: [
             25, 30
           ],
-          mannaRequired: 100
+          dubRageRequired: 100
         }
       },
-      dubRage: 20,
+      dubRage: 0,
     }
   };
 
   P1 = characters.Simula;
   P2 = characters.Noisia;
-
-  console.log(P1);
-  console.log(P2);
 
   document.getElementById('p1_name').innerHTML = P1.name;
   document.getElementById('p2_name').innerHTML = P2.name;
@@ -66,38 +65,50 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('p2_health').innerHTML = P2.health;
 
   document.getElementById('defaultAttack').onclick = function() {
-    initRound('defaultAttack');
+    if (P1_TURN === 1) {
+      initRound('defaultAttack');
+    }
   };
 
   document.getElementById('special1').onclick = function() {
-    initRound('special1');
+    if (P1_TURN === 1) {
+      if (P1.dubRage >= P1.attacks.special1.dubRageRequired) {
+        initRound('special1');
+      } else {
+        console.log('You dont have enough Dub Rage for this move.');
+      }
+    }
   };
 
   function initRound(attackType) {
-    if (P1_TURN === 1) {
+    console.log('Round: ' + ROUND);
 
-      console.log('Round: ' + ROUND);
+    P1_TURN = 0;
+    P2_TURN = 1;
 
-      //players move
-      playMovePlayer(P1, P2, attackType);
+    console.log(P1);
+    console.log(P2);
 
-      // Ai's move
-      setTimeout(function() {
-        playMoveAI(P1, P2);
-        P1.dubRage += 20;
-        P2.dubRage += 20;
-        console.log('Round Finished');
-        console.log('--------------');
-        ROUND++;
-      }, 2000);
-    }
+    //players move
+    playMovePlayer(P1, P2, attackType);
+
+    // Ai's move
+    setTimeout(function() {
+      playMoveAI(P1, P2);
+      P1.dubRage += 20;
+      P2.dubRage += 20;
+      console.log('Round Finished');
+      console.log('--------------');
+      ROUND++;
+      //changes turns
+      P1_TURN = 1;
+      P2_TURN = 0;
+    }, 2000);
   }
 
   function randomBetween(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
-
-
 
   //player plays the move
   function playMovePlayer(P1, P2, attackType) {
@@ -105,6 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var attackMin;
     var attackMax;
     var moveName;
+    var dubRageRequired;
 
     //checks which attackType is used
     switch (attackType) {
@@ -112,16 +124,22 @@ document.addEventListener('DOMContentLoaded', function() {
         attackMin = P1.attacks.defaultAttack.attack[0];
         attackMax = P1.attacks.defaultAttack.attack[1];
         moveName = P1.attacks.defaultAttack.name + " (Standard)";
+        dubRageRequired = P1.attacks.defaultAttack.dubRageRequired;
         break;
       case 'special1':
         attackMin = P1.attacks.special1.attack[0];
         attackMax = P1.attacks.special1.attack[1];
         moveName = P1.attacks.special1.name + " (Special)";
+        dubRageRequired = P1.attacks.special1.dubRageRequired;
         break;
     }
+
     //uses move
     var damage = randomBetween(attackMin, attackMax);
     P2.health -= damage;
+
+    //uses Dub rage
+    P1.dubRage -= dubRageRequired;
 
     //logs changes
     console.log(P1.name + ' uses ' + moveName);
@@ -140,17 +158,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (P2.health <= 0) {
       console.log(P2.name + ' is dead, game over... ' + P1.name + ' won!');
     }
-
-    //changes turns
-    P1_TURN = 0;
-    P2_TURN = 1;
   }
-
-
 
   //AI plays the move
   function playMoveAI(P1, P2) {
-
 
     //picks random move
     var myArray = ['defaultAttack', 'special1'];
@@ -194,12 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (P1.health <= 0) {
       console.log(P1.name + ' is dead, game over... ' + P2.name + ' won!');
     }
-
-    //changes turns
-    P2_TURN = 0;
-    P1_TURN = 1;
   }
-
 
   //closes the bundle
 });
