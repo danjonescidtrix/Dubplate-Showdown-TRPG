@@ -3,8 +3,20 @@
 // * Use this to set font size by
 //   calling variable and then appending a size eg "@include font-size:(10);"
 // -----------------------------------------------------------------
+//
+//@function calculateRem($size) {
+//  $remSize: $size / 16px;
+//  @return $remSize * 1rem;
+//}
+
+//@mixin font-size($size) {
+//  font-size: $size;
+//  font-size: calculateRem($size);
+//}
+
+
+//Rework this to the above
 @mixin font-size($sizeValue: 1.6) {
     font-size: ($sizeValue * 10) + px;
-    font-size: $sizeValue + rem;
+    font-size: $sizeValue + em;
 }
-

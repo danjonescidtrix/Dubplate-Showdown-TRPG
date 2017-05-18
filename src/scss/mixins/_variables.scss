@@ -1,9 +1,0 @@
-// Read Color if color light or dark
-
-@function readColor($color, $amount) {
-  @if (lightness($color) > 40) {
-    @return darken($color, $amount); // Lighter backgorund, return dark color
-  } @else {
-    @return lighten($color, $amount); // Darker background, return light color
-  }
-}

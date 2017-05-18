@@ -1,0 +1,12 @@
+// "Mixins" Imports different Mixins e.g border-radius, button styles etc. 
+//
+// Import Mixins
+@import "mixins/animation";
+@import "mixins/border-radius";
+@import "mixins/button-variants";
+@import "mixins/font";
+@import "mixins/layout";
+@import "mixins/opacity";
+@import "mixins/shadows";
+@import "mixins/shapes";
+@import "mixins/transitions";

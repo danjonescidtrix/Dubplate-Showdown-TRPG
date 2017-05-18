@@ -1,7 +1,3 @@
-@import '_buttons.scss';
-@import '_typography.scss';
-@import '_app.scss';
-@import '_breakpoints.scss';
-@import '_print.scss';
-@import '_vars.scss';
-@import '_defaults.scss';
+$base : #F7F6F0;
+$darken : darken(#F7F6F0 , 30%);
+$back: darken(#F7F6F0, 40%);
