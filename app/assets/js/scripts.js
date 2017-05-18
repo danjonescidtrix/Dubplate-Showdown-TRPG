@@ -175,9 +175,27 @@ document.addEventListener('DOMContentLoaded', function() {
     var myArray = ['defaultAttack', 'special1'];
     var attackType = myArray[Math.floor(Math.random() * myArray.length)];
 
+
     var attackMin;
     var attackMax;
     var moveName;
+    var dubRageRequired;
+
+    switch (attackType) {
+      case 'defaultAttack':
+        dubRageRequired = 0;
+        break;
+      case 'special1':
+        dubRageRequired = P2.attacks.special1.dubRageRequired;
+        break;
+    }
+
+    //checks if has enough dubRage for this attack, if not, pick random default
+    if (P2.dubRage < dubRageRequired) {
+      myArray = ['defaultAttack', 'defaultAttack'];
+      attackType = myArray[Math.floor(Math.random() * myArray.length)];
+    }
+
 
     //checks which attackType has been picked
     switch (attackType) {
@@ -185,17 +203,22 @@ document.addEventListener('DOMContentLoaded', function() {
         attackMin = P2.attacks.defaultAttack.attack[0];
         attackMax = P2.attacks.defaultAttack.attack[1];
         moveName = P2.attacks.defaultAttack.name + " (Standard)";
+        dubRageRequired = P2.attacks.defaultAttack.dubRageRequired;
         break;
       case 'special1':
         attackMin = P2.attacks.special1.attack[0];
         attackMax = P2.attacks.special1.attack[1];
         moveName = P2.attacks.special1.name + " (Special)";
+        dubRageRequired = P2.attacks.special1.dubRageRequired;
         break;
     }
 
     //uses move
     var damage = randomBetween(attackMin, attackMax);
     P1.health -= damage;
+
+    //uses Dub rage
+    P2.dubRage -= dubRageRequired;
 
     //logs changes
     console.log(P2.name + ' uses ' + moveName);
