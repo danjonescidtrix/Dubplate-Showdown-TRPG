@@ -1,0 +1,263 @@
+// -----------------------------
+// --- px & em conversion ---
+// -----------------------------
+@function convert($value, $currentUnit, $convertUnit) {
+   @if $currentUnit == px{
+    @if $convertUnit == ems {
+       @return $value / 14 + 0em;
+    }
+    @else if $convertUnit == percent {
+       @return percentage($value / 16);
+    }
+  }
+  @else if $currentUnit == ems {
+     @if $convertUnit == px{
+      @return $value * 14 + 0px;
+    }
+    @else if $convertUnit == percent {
+       @return percentage($value);
+    }
+  }
+  @else if $currentUnit == percent {
+     @if $convertUnit == px{
+      @return $value * 14 / 100 + 0px;
+    }
+    @else if $convertUnit == ems {
+       @return $value / 100 + 0em;
+    }
+  }
+  @else if $currentUnit == pts {
+     @if $convertUnit == px{
+      @return $value * 1.3333 +0px;
+    }
+    @else if $convertUnit == ems {
+       @return $value / 12 + 0em;
+    }
+    @else if $convertUnit == percent {
+       @return percentage($value / 12)
+    }
+  }
+}
+// -----------------------------
+// Media Query Mixin
+// e.g:
+//	.class {
+//		@include breakpoint(sm) {
+//			>sm specific styles
+//		}
+//	}
+// -----------------------------
+@mixin breakpoint($min: 0, $max: 0) {
+  $type: type-of($min);
+  @if $type == string {
+     @if $min == xs{
+      @media (max-width: 767px) {
+         @content;
+      }
+      // Mobile Devices
+    }
+    @else if $min == sm {
+       @media (min-width: 768px){
+        @content;
+      }
+      // Tablet Devices
+    }
+    @else if $min == md {
+       @media (min-width: 992px){
+        @content;
+      }
+      // Desktops
+    }
+    @else if $min == lg {
+       @media (min-width: 1200px){
+        @content;
+      }
+      // Widescreen Desktops
+    }
+    @else if $min == ipadL {
+       @media (min-width: 1025px){
+        @content;
+      }
+      // iPad Landscape
+    }
+    @else if $min == ipadP {
+       @media (min-width: 769px){
+        @content;
+      }
+      // iPad Portrait
+    }
+    // Otherwise pass a warning to the compiler as to the appropriate options
+    @else {
+       @warn"The breakpoint mixin supports the following attributes: xs, sm, md, lg";
+    }
+  }
+  @else if $type == number {
+    // Allow for custom parameters for min and max size
+    $query: "all" !default;
+    @if $min != 0 and $max != 0 {
+      $query: "(min-width: #{$min}) and (max-width: #{$max})";
+    }
+    // set both min and max
+    @else if $min != 0 and $max == 0 {
+      $query: "(min-width: #{$min})";
+    }
+    // set just min
+    @else if $min == 0 and $max != 0 {
+      $query: "(max-width: #{$max})";
+    }
+    // set just max
+    @media #{$query} {
+       @content;
+    }
+  }
+}
+@mixin breakpoint-height($min: 0, $max: 0) {
+  // Allow for custom parameters for min and max size
+  $query: "all" !default;
+  @if $min != 0 and $max != 0 {
+    $query: "(min-height: #{$min}) and (max-height: #{$max})";
+  }
+  // set both min and max
+  @else if $min != 0 and $max == 0 {
+    $query: "(min-height: #{$min})";
+  }
+  // set just min
+  @else if $min == 0 and $max != 0 {
+    $query: "(max-height: #{$max})";
+  }
+  // set just max
+  @media #{$query} {
+     @content;
+  }
+}
+// -----------------------------
+// --- Border Radii ---
+// -----------------------------
+@mixin border-all-radius($radius) {
+  border-radius: $radius;
+}
+@mixin border-top-radius($radius) {
+  border-top-right-radius: $radius;
+  border-top-left-radius: $radius;
+}
+@mixin border-bottom-radius($radius) {
+  border-bottom-right-radius: $radius;
+  border-bottom-left-radius: $radius;
+}
+// -----------------------------
+// --- Material Shadows ---
+// -----------------------------
+@mixin drop-shadow($depth) {
+   @if $depth==0{
+    box-shadow: none;
+  }
+  @if $depth==1 {
+    box-shadow: 0 1.5px 3px -0.75px rgba(black, 0.24), 0 3px 8px -1.5px rgba(black, 0.05);
+  }
+  @if $depth==2 {
+    box-shadow: 0 4px 7px -2px rgba(black, 0.23), 0 8px 25px -4px rgba(black, 0.05);
+  }
+  @if $depth==3 {
+    box-shadow: 0 7px 10px -3.5px rgba(black, 0.30), 0 10px 50px -5px rgba(black, 0.12);
+  }
+  @if $depth==4 {
+    box-shadow: 0 10px 15px -5px rgba(black, 0.28), 0 15px 60px -7.5px rgba(black, 0.18);
+  }
+  @if $depth==5 {
+    box-shadow: 0 16px 20px -8px rgba(black, 0.29), 0 20px 65px -10px rgba(black, 0.18);
+  }
+  @if $depth==L {
+    box-shadow: 5px 0 10px -5px rgba(black, 0.40);
+  }
+  @if $depth==R {
+    box-shadow: 5px 0 10px 5px rgba(black, 0.40);
+  }
+}
+@mixin drop-shadow-inset($depth) {
+   @if $depth==0{
+    box-shadow: none;
+  }
+  @if $depth==1 {
+    box-shadow: 0 1.5px 3px rgba(black, 0.24) inset, 0 3px 8px rgba(black, 0.05) inset;
+  }
+  @if $depth==2 {
+    box-shadow: 0 4px 7px rgba(black, 0.23) inset, 0 8px 25px rgba(black, 0.05) inset;
+  }
+  @if $depth==3 {
+    box-shadow: 0 7px 10px rgba(black, 0.30) inset, 0 10px 50px rgba(black, 0.12) inset;
+  }
+  @if $depth==4 {
+    box-shadow: 0 10px 15px rgba(black, 0.28) inset, 0 15px 60px rgba(black, 0.18) inset;
+  }
+  @if $depth==5 {
+    box-shadow: 0 16px 20px rgba(black, 0.29) inset, 0 20px 65px rgba(black, 0.18) inset;
+  }
+}
+// -----------------------------
+//  --- Clean Spinner ---
+// -----------------------------
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+@mixin spinner($width, $height, $bar_length, $bar_thickness, $font-size: 12px, $color: #555) {
+  position: relative;
+  display: inline-block;
+  width: $width;
+  height: $height;
+  margin: 0 0.5em;
+  font-size: $font-size;
+  text-indent: 999em;
+  overflow: hidden;
+  animation: spin 1s infinite steps(8);
+
+  &.loadingSpinner-middlemiddle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: (-$width/2) 0 0 (-$width/2);
+  }
+
+  & > div:after,
+  & > div:before,
+  &:after,
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: (($width)-($bar_thickness))/2;
+    /* (container width - part width)/2  */
+    width: $bar_thickness;
+    height: $bar_length;
+    border-radius: 0.2em;
+    background: lighten($color, 50%);
+    box-shadow: 0 ($height)-($bar_length) lighten($color, 60%);
+    /* container   height - part height */
+    transform-origin: 50% $height/2;
+    /* container height / 2 */
+  }
+
+  &:before {
+    background: $color;
+  }
+
+  &:after {
+    transform: rotate(-45deg);
+    background: lighten($color, 20%);
+  }
+
+  & > div:before {
+    transform: rotate(-90deg);
+    background: lighten($color, 30%);
+  }
+
+  & > div:after {
+    transform: rotate(-135deg);
+    background: lighten($color, 40%);
+  }
+}
+
+.loadingSpinner {
+  @include spinner(4em, 4em, 1em, .3em, 20px);
+}
