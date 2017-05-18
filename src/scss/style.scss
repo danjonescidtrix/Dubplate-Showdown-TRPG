@@ -1,12 +1,12 @@
-
 // -----  Helpers ------ //
-@import 'helpers/_helpers.scss';
+@import 'helpers/helpers.scss';
 
-// ----- Partial Styles ------ //
-@import 'partials/_partials.scss';
+// -----  Partial Styles ------ //
+@import 'partials/partials.scss';
 
-// ----- Component Styles ------ //
-@import 'components/_components.scss';
+// -----  Partial Styles ------ //
+@import "components/components.scss";
 
-// ----- Vendor Styles ------ //
-@import 'vendor/_vendor.scss';
+// -----  Vendor Styles ------ //
+@import 'vendor/vendor.scss';
+
