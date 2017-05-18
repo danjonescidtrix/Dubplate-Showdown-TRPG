@@ -129,8 +129,6 @@ document.addEventListener('DOMContentLoaded', function() {
         break;
     }
 
-
-
     P1.dubRage += 20;
     P2.dubRage += 20;
     console.log('Round Finished');
@@ -140,30 +138,9 @@ document.addEventListener('DOMContentLoaded', function() {
     P1_TURN = 1;
     P2_TURN = 0;
 
-
-
-    //   playMoveAI(P1, P2);
-    // // Ai's move
-    // setTimeout(function() {
-    // }, 2000);
   }
 
-  function randomBetween(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  }
-
-  function shuffleArray(array) {
-    for (var i = array.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var temp = array[i];
-      array[i] = array[j];
-      array[j] = temp;
-    }
-    return array;
-  }
-
-
-  //player plays the move
+  //plays the move
   function playMovePlayer(attackMove, defenceMove, attacker, defender) {
 
     var attackMin;
@@ -171,9 +148,6 @@ document.addEventListener('DOMContentLoaded', function() {
     var moveName;
     var dubRageRequired;
     var damage;
-
-
-
 
     if (attackMove) {
       //sets variables
@@ -205,78 +179,20 @@ document.addEventListener('DOMContentLoaded', function() {
     if (defender.health <= 0) {
       console.log(defender.name + ' is dead, game over... ' + attacker.name + ' won!');
     }
-
-
   }
 
-  //AI plays the move
-  function playMoveAI(P1, P2) {
+  function randomBetween(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
 
-    //picks random move
-    var myArray = ['defaultAttack', 'special1'];
-    var attackType = myArray[Math.floor(Math.random() * myArray.length)];
-
-
-    var attackMin;
-    var attackMax;
-    var moveName;
-    var dubRageRequired;
-
-    switch (attackType) {
-      case 'defaultAttack':
-        dubRageRequired = 0;
-        break;
-      case 'special1':
-        dubRageRequired = P2.attacks.special1.dubRageRequired;
-        break;
+  function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
     }
-
-    //checks if has enough dubRage for this attack, if not, pick random default
-    if (P2.dubRage < dubRageRequired) {
-      myArray = ['defaultAttack', 'defaultAttack'];
-      attackType = myArray[Math.floor(Math.random() * myArray.length)];
-    }
-
-
-    //checks which attackType has been picked
-    switch (attackType) {
-      case 'defaultAttack':
-        attackMin = P2.attacks.defaultAttack.attack[0];
-        attackMax = P2.attacks.defaultAttack.attack[1];
-        moveName = P2.attacks.defaultAttack.name + " (Standard)";
-        dubRageRequired = P2.attacks.defaultAttack.dubRageRequired;
-        break;
-      case 'special1':
-        attackMin = P2.attacks.special1.attack[0];
-        attackMax = P2.attacks.special1.attack[1];
-        moveName = P2.attacks.special1.name + " (Special)";
-        dubRageRequired = P2.attacks.special1.dubRageRequired;
-        break;
-    }
-
-    //uses move
-    var damage = randomBetween(attackMin, attackMax);
-    P1.health -= damage;
-
-    //uses Dub rage
-    P2.dubRage -= dubRageRequired;
-
-    //logs changes
-    console.log(P2.name + ' uses ' + moveName);
-    console.log(P2.name + ' does ' + damage + ' damage to ' + P1.name);
-    console.log(P1.name + ' health is now ' + P1.health);
-
-    //takes health
-    document.getElementById('p1_health').innerHTML = P1.health;
-    document.getElementById('p2_health').innerHTML = P2.health;
-
-    //ends turns
-    console.log(P2.name + ' turn over');
-
-    //checks if health < 0
-    if (P1.health <= 0) {
-      console.log(P1.name + ' is dead, game over... ' + P2.name + ' won!');
-    }
+    return array;
   }
 
   //closes the bundle
