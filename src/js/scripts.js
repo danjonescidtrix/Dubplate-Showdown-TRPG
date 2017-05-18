@@ -66,21 +66,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.getElementById('defaultAttack').onclick = function() {
     if (P1_TURN === 1) {
-      initRound('defaultAttack');
+      initRound('defaultAttack', '');
     }
   };
 
   document.getElementById('special1').onclick = function() {
     if (P1_TURN === 1) {
       if (P1.dubRage >= P1.attacks.special1.dubRageRequired) {
-        initRound('special1');
+        initRound('special1', '');
       } else {
         console.log('You dont have enough Dub Rage for this move.');
       }
     }
   };
 
-  function initRound(attackType) {
+  function initRound(attack, defence) {
     console.log('Round: ' + ROUND);
 
     P1_TURN = 0;
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log(P2);
 
     //players move
-    playMovePlayer(P1, P2, attackType);
+    playMovePlayer(attack, defence);
 
     // Ai's move
     setTimeout(function() {
@@ -111,53 +111,47 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   //player plays the move
-  function playMovePlayer(P1, P2, attackType) {
+  function playMovePlayer(attack, defence) {
 
     var attackMin;
     var attackMax;
     var moveName;
     var dubRageRequired;
+    var damage;
 
-    //checks which attackType is used
-    switch (attackType) {
-      case 'defaultAttack':
-        attackMin = P1.attacks.defaultAttack.attack[0];
-        attackMax = P1.attacks.defaultAttack.attack[1];
-        moveName = P1.attacks.defaultAttack.name + " (Standard)";
-        dubRageRequired = P1.attacks.defaultAttack.dubRageRequired;
-        break;
-      case 'special1':
-        attackMin = P1.attacks.special1.attack[0];
-        attackMax = P1.attacks.special1.attack[1];
-        moveName = P1.attacks.special1.name + " (Special)";
-        dubRageRequired = P1.attacks.special1.dubRageRequired;
-        break;
+
+    if (attack) {
+      //sets variables
+      attackMin = P1.attacks[attack].attack[0];
+      attackMax = P1.attacks[attack].attack[1];
+      damage = randomBetween(attackMin, attackMax);
+      moveName = P1.attacks[attack].name;
+      dubRageRequired = P1.attacks[attack].dubRageRequired;
+      //does damage
+      P2.health -= damage;
+      //uses dubRage
+      P1.dubRage -= dubRageRequired;
+      //takes health
+      document.getElementById('p1_health').innerHTML = P1.health;
+      document.getElementById('p2_health').innerHTML = P2.health;
+      //logs changes
+      console.log(P1.name + ' uses ' + moveName);
+      console.log(P1.name + ' does ' + damage + ' damage to ' + P2.name);
+      console.log(P2.name + ' health is now ' + P2.health);
     }
 
-    //uses move
-    var damage = randomBetween(attackMin, attackMax);
-    P2.health -= damage;
-
-    //uses Dub rage
-    P1.dubRage -= dubRageRequired;
-
-    //logs changes
-    console.log(P1.name + ' uses ' + moveName);
-    console.log(P1.name + ' does ' + damage + ' damage to ' + P2.name);
-    console.log(P2.name + ' health is now ' + P2.health);
-
-    //takes health
-    document.getElementById('p1_health').innerHTML = P1.health;
-    document.getElementById('p2_health').innerHTML = P2.health;
+    if (defence) {
+      damage = 0;
+    }
 
     //ends turns
     console.log(P1.name + ' turn over');
     console.log('');
-
-    //checks if health < 0
     if (P2.health <= 0) {
       console.log(P2.name + ' is dead, game over... ' + P1.name + ' won!');
     }
+
+
   }
 
   //AI plays the move
