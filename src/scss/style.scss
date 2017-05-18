@@ -1,21 +1,12 @@
-@import 'vendor/_resetl.scss';
-@import 'mixins/_position.scss';
-@import 'modules/_vars.scss';
-@import 'modules/_defaults.scss';
 
- //----------------------------------*/
-@import 'partials/_header.scss';
-@import 'partials/_nav.scss';
-@import 'partials/_sidebar.scss';
-@import 'partials/_main.scss';
-@import 'partials/_footer.scss';
+// -----  Mixins ------ //
+@import 'mixins/_mixins.scss';
 
-//----------------------------------*/
-@import 'modules/_buttons.scss';
-@import 'modules/_typography.scss';
-@import 'modules/_app.scss';
-@import 'modules/_breakpoints.scss';
-@import 'modules/_print.scss';
+// ----- Partial Styles ------ //
+@import 'partials/_partials.scss';
 
-//----------------------------------*/
-@import 'vendor/_bootstrap-100-col.scss';
+// ----- Component Styles ------ //
+@import 'components/_components.scss';
+
+// ----- Vendor Styles ------ //
+@import 'vendor/_vendor.scss';

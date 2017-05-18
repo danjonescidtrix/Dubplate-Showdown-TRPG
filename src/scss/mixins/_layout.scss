@@ -1,0 +1,110 @@
+// -----------------------------
+// Positioning
+// -----------------------------
+@mixin centerAlign {
+  /* Must have parent with relative positioning */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+@mixin centerBlock {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+@mixin stripInput {
+  outline: none;
+  border: none;
+}
+// -----------------------------
+// Media Query Mixin
+// e.g:
+//	.class {
+//		@include breakpoint(sm) {
+//			>sm specific styles
+//		}
+//	}
+// -----------------------------
+@mixin breakpoint($min: 0, $max: 0) {
+  $type: type-of($min);
+  @if $type==string {
+     @if $min==iPhone4{
+      @media (min-width: 480px) {
+         @content;
+      }
+      // Iphone 4 width and below
+    }
+    @else if $min==xxs {
+       @media (min-width: 568px){
+        @content;
+      }
+      // Iphone 5 and below
+    }
+    @else if $min==xs {
+       @media (min-width: 767px){
+        @content;
+      }
+      // Mobile Devices
+    }
+    @else if $min==sm {
+       @media (min-width: 768px){
+        @content;
+      }
+      // Tablet Devices
+    }
+    @else if $min==md {
+       @media (min-width: 992px){
+        @content;
+      }
+      // Desktops
+    }
+    @else if $min==lg {
+       @media (min-width: 1200px){
+        @content;
+      }
+      // Widescreen Desktops
+    }
+    @else if $min==lp {
+       @media (min-width: 1366px){
+        @content;
+      }
+      // Widescreen Desktops
+    }
+    @else if $min==ipadL {
+       @media (min-width: 1025px){
+        @content;
+      }
+      // iPad Landscape
+    }
+    @else if $min==ipadP {
+       @media (min-width: 769px){
+        @content;
+      }
+      // iPad Portrait
+    }
+    // Otherwise pass a warning to the compiler as to the appropriate options
+    @else {
+       @warn"The breakpoint mixin supports the following attributes: xxs, xs, sm, md, lg";
+    }
+  }
+  @else if $type==number {
+    // Allow for custom parameters for min and max size
+    $query: "all" !default;
+    @if $min !=0 and $max !=0 {
+      $query: "(min-width: #{$min}) and (min-width: #{$max})";
+    }
+    // set both min and max
+    @else if $min !=0 and $max==0 {
+      $query: "(min-width: #{$min})";
+    }
+    // set just min
+    @else if $min==0 and $max !=0 {
+      $query: "(min-width: #{$max})";
+    }
+    // set just max
+    @media #{$query} {
+       @content;
+    }
+  }
+}

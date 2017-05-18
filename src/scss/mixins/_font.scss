@@ -1,0 +1,10 @@
+// ----------------------------------------------------------------
+// Font Sizes
+// * Use this to set font size by
+//   calling variable and then appending a size eg "@include font-size:(10);"
+// -----------------------------------------------------------------
+@mixin font-size($sizeValue: 1.6) {
+    font-size: ($sizeValue * 10) + px;
+    font-size: $sizeValue + rem;
+}
+
