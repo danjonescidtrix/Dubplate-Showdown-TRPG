@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log(P2);
 
     //players move
-    playMovePlayer(attackMove, defenceMove, P1, P2);
+    initMove(attackMove, defenceMove, P1, P2);
 
     //bot's move
     var moveArray = ['attackMove', 'defenceMove'];
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
           //if attack's dub rage available, use this atack, else keep looping
           if (P2.dubRage >= P1.attacks[thisFromShuffle].dubRageRequired) {
             attackMove = thisFromShuffle;
-            playMovePlayer(attackMove, defenceMove, P2, P1);
+            initMove(attackMove, defenceMove, P2, P1);
             break;
           }
         }
@@ -125,6 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
     P2.dubRage += 20;
     console.log('Round Finished');
     console.log('--------------');
+    updateElems();
     ROUND++;
     //changes turns
     P1_TURN = 1;
@@ -133,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   //plays the move
-  function playMovePlayer(attackMove, defenceMove, attacker, defender) {
+  function initMove(attackMove, defenceMove, attacker, defender) {
 
     var attackMin;
     var attackMax;
@@ -152,9 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
       defender.health -= damage;
       //uses dubRage
       attacker.dubRage -= dubRageRequired;
-      //takes health
-      document.getElementById('p1_health').innerHTML = attacker.health;
-      document.getElementById('p2_health').innerHTML = defender.health;
+
       //logs changes
       console.log(attacker.name + ' uses ' + moveName);
       console.log(attacker.name + ' does ' + damage + ' damage to ' + defender.name);
@@ -185,6 +184,11 @@ document.addEventListener('DOMContentLoaded', function() {
       array[j] = temp;
     }
     return array;
+  }
+
+  function updateElems() {
+    document.getElementById('p1_health').innerHTML = P1.health;
+    document.getElementById('p2_health').innerHTML = P2.health;
   }
 
   //closes the bundle
