@@ -88,38 +88,83 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
 
-  function initRound(attack, defence) {
-    console.log('Round: ' + ROUND);
+  function initRound(attackMove, defenceMove) {
 
+    //init round
+    console.log('Round: ' + ROUND);
     P1_TURN = 0;
     P2_TURN = 1;
-
     console.log(P1);
     console.log(P2);
 
     //players move
-    playMovePlayer(attack, defence);
+    playMovePlayer(attackMove, defenceMove, P1, P2);
 
-    // Ai's move
-    setTimeout(function() {
-      playMoveAI(P1, P2);
-      P1.dubRage += 20;
-      P2.dubRage += 20;
-      console.log('Round Finished');
-      console.log('--------------');
-      ROUND++;
-      //changes turns
-      P1_TURN = 1;
-      P2_TURN = 0;
-    }, 2000);
+    //bot's move
+    var moveArray = ['attackMove', 'defenceMove'];
+    var move = moveArray[Math.floor(Math.random() * moveArray.length)];
+
+    switch (move) {
+      case 'attackMove':
+        var attackArray = [];
+        Object.keys(P2.attacks).forEach(function(key, index) {
+          attackArray.push(key);
+        });
+        //randomize attackArray to new arracy
+        var shuffleAttackArray = shuffleArray(attackArray);
+        var arrayLength = shuffleAttackArray.length;
+        //loop array, check dubrequired vs P2 dubRage
+        for (var i = 0; i < arrayLength; i++) {
+          var thisFromShuffle = shuffleAttackArray[i];
+          //if attack's dub rage available, use this atack, else keep looping
+          if (P2.dubRage >= P1.attacks[thisFromShuffle].dubRageRequired) {
+            attackMove = thisFromShuffle;
+            playMovePlayer(attackMove, defenceMove, P2, P1);
+            break;
+          }
+        }
+        break;
+      case 'defenceMove':
+        console.log(P2.name + " uses defence.");
+        break;
+    }
+
+
+
+    P1.dubRage += 20;
+    P2.dubRage += 20;
+    console.log('Round Finished');
+    console.log('--------------');
+    ROUND++;
+    //changes turns
+    P1_TURN = 1;
+    P2_TURN = 0;
+
+
+
+    //   playMoveAI(P1, P2);
+    // // Ai's move
+    // setTimeout(function() {
+    // }, 2000);
   }
 
   function randomBetween(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
+  function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+    return array;
+  }
+
+
   //player plays the move
-  function playMovePlayer(attack, defence) {
+  function playMovePlayer(attackMove, defenceMove, attacker, defender) {
 
     var attackMin;
     var attackMax;
@@ -128,35 +173,37 @@ document.addEventListener('DOMContentLoaded', function() {
     var damage;
 
 
-    if (attack) {
+
+
+    if (attackMove) {
       //sets variables
-      attackMin = P1.attacks[attack].attack[0];
-      attackMax = P1.attacks[attack].attack[1];
+      attackMin = attacker.attacks[attackMove].attack[0];
+      attackMax = attacker.attacks[attackMove].attack[1];
       damage = randomBetween(attackMin, attackMax);
-      moveName = P1.attacks[attack].name;
-      dubRageRequired = P1.attacks[attack].dubRageRequired;
+      moveName = attacker.attacks[attackMove].name;
+      dubRageRequired = attacker.attacks[attackMove].dubRageRequired;
       //does damage
-      P2.health -= damage;
+      defender.health -= damage;
       //uses dubRage
-      P1.dubRage -= dubRageRequired;
+      attacker.dubRage -= dubRageRequired;
       //takes health
-      document.getElementById('p1_health').innerHTML = P1.health;
-      document.getElementById('p2_health').innerHTML = P2.health;
+      document.getElementById('p1_health').innerHTML = attacker.health;
+      document.getElementById('p2_health').innerHTML = defender.health;
       //logs changes
-      console.log(P1.name + ' uses ' + moveName);
-      console.log(P1.name + ' does ' + damage + ' damage to ' + P2.name);
-      console.log(P2.name + ' health is now ' + P2.health);
+      console.log(attacker.name + ' uses ' + moveName);
+      console.log(attacker.name + ' does ' + damage + ' damage to ' + defender.name);
+      console.log(defender.name + ' health is now ' + defender.health);
     }
 
-    if (defence) {
+    if (defenceMove) {
       damage = 0;
     }
 
     //ends turns
-    console.log(P1.name + ' turn over');
+    console.log(attacker.name + ' turn over');
     console.log('');
-    if (P2.health <= 0) {
-      console.log(P2.name + ' is dead, game over... ' + P1.name + ' won!');
+    if (defender.health <= 0) {
+      console.log(defender.name + ' is dead, game over... ' + attacker.name + ' won!');
     }
 
 
