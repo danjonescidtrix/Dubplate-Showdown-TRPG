@@ -1,0 +1,13 @@
+
+.character--body-default{
+  position: absolute;
+  width: 100px;
+  height: 150px;
+  background: #424b54;
+  top: 130px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 40px;
+  z-index: 1;
+  overflow: hidden;
+}
