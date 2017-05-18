@@ -4,6 +4,10 @@
 // -----------------------------
 //  Colors
 // -----------------------------
+$base : #F7F6F0;
+$darken : darken(#F7F6F0 , 30%);
+$back: darken(#F7F6F0, 40%);
+
 $blueLight: #169bbf;
 $blueDark: #01152B;
 $default: #FFFFFF;
@@ -57,3 +61,19 @@ $light-color: #ecf0f1;
 $dark-color: #222;
 $modal-submit-color: #2ecc71;
 $modal-reset-color: #EEE;
+
+//Character
+$color-dark: #424b54;
+$color-skin: #F0BEAF;
+$color-skin-dark: #8b4513;
+$color-blue: #2196F3;
+$color-gold: #FDD835;
+$color-magneto-prime: #EE3152;
+$color-magneto-accent: #795998;
+$color-magnetism: #90CAF9;
+$color-hair-iceman: #B3695B;
+$color-elf: #0D47A1;
+$color-bamf: #CE93D8;
+$color-hair-storm: #ddd;
+$color-hair-cyclops: #9b651d;
+$color-hair-jean: #DC5846;
