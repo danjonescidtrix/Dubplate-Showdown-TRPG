@@ -2,6 +2,11 @@
 # https://HosseinKarami.github.io/fastshell
 # @author Hossein Karami
 
+## General
+
+.idea
+app/assets/css
+app/assets/js
 
 ## Node.js
 lib-cov
