@@ -1,3 +1,9 @@
+'use strict';
+require('../scss/index.scss');
+
+import {initMove} from "./initMove";
+
+
 //opens the bundle
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -125,7 +131,6 @@ document.addEventListener('DOMContentLoaded', function() {
     P2.dubRage += 20;
     console.log('Round Finished');
     console.log('--------------');
-    updateElems();
     ROUND++;
     //changes turns
     P1_TURN = 1;
@@ -133,44 +138,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   }
 
-  //plays the move
-  function initMove(attackMove, defenceMove, attacker, defender) {
-
-    var attackMin;
-    var attackMax;
-    var moveName;
-    var dubRageRequired;
-    var damage;
-
-    if (attackMove) {
-      //sets variables
-      attackMin = attacker.attacks[attackMove].attack[0];
-      attackMax = attacker.attacks[attackMove].attack[1];
-      damage = randomBetween(attackMin, attackMax);
-      moveName = attacker.attacks[attackMove].name;
-      dubRageRequired = attacker.attacks[attackMove].dubRageRequired;
-      //does damage
-      defender.health -= damage;
-      //uses dubRage
-      attacker.dubRage -= dubRageRequired;
-
-      //logs changes
-      console.log(attacker.name + ' uses ' + moveName);
-      console.log(attacker.name + ' does ' + damage + ' damage to ' + defender.name);
-      console.log(defender.name + ' health is now ' + defender.health);
-    }
-
-    if (defenceMove) {
-      damage = 0;
-    }
-
-    //ends turns
-    console.log(attacker.name + ' turn over');
-    console.log('');
-    if (defender.health <= 0) {
-      console.log(defender.name + ' is dead, game over... ' + attacker.name + ' won!');
-    }
-  }
 
   function randomBetween(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -184,11 +151,6 @@ document.addEventListener('DOMContentLoaded', function() {
       array[j] = temp;
     }
     return array;
-  }
-
-  function updateElems() {
-    document.getElementById('p1_health').innerHTML = P1.health;
-    document.getElementById('p2_health').innerHTML = P2.health;
   }
 
   //closes the bundle
