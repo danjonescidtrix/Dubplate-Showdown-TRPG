@@ -1,3 +1,9 @@
+'use strict';
+require('../scss/index.scss');
+
+import {initMove} from "./initMove";
+
+
 //opens the bundle
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -90,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log(P2);
 
     //players move
-    playMovePlayer(attackMove, defenceMove, P1, P2);
+    initMove(attackMove, defenceMove, P1, P2);
 
     //bot's move
     var moveArray = ['attackMove', 'defenceMove'];
@@ -111,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
           //if attack's dub rage available, use this atack, else keep looping
           if (P2.dubRage >= P1.attacks[thisFromShuffle].dubRageRequired) {
             attackMove = thisFromShuffle;
-            playMovePlayer(attackMove, defenceMove, P2, P1);
+            initMove(attackMove, defenceMove, P2, P1);
             break;
           }
         }
@@ -132,46 +138,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   }
 
-  //plays the move
-  function playMovePlayer(attackMove, defenceMove, attacker, defender) {
-
-    var attackMin;
-    var attackMax;
-    var moveName;
-    var dubRageRequired;
-    var damage;
-
-    if (attackMove) {
-      //sets variables
-      attackMin = attacker.attacks[attackMove].attack[0];
-      attackMax = attacker.attacks[attackMove].attack[1];
-      damage = randomBetween(attackMin, attackMax);
-      moveName = attacker.attacks[attackMove].name;
-      dubRageRequired = attacker.attacks[attackMove].dubRageRequired;
-      //does damage
-      defender.health -= damage;
-      //uses dubRage
-      attacker.dubRage -= dubRageRequired;
-      //takes health
-      document.getElementById('p1_health').innerHTML = attacker.health;
-      document.getElementById('p2_health').innerHTML = defender.health;
-      //logs changes
-      console.log(attacker.name + ' uses ' + moveName);
-      console.log(attacker.name + ' does ' + damage + ' damage to ' + defender.name);
-      console.log(defender.name + ' health is now ' + defender.health);
-    }
-
-    if (defenceMove) {
-      damage = 0;
-    }
-
-    //ends turns
-    console.log(attacker.name + ' turn over');
-    console.log('');
-    if (defender.health <= 0) {
-      console.log(defender.name + ' is dead, game over... ' + attacker.name + ' won!');
-    }
-  }
 
   function randomBetween(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
