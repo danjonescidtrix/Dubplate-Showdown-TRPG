@@ -1,3 +1,11 @@
+/*!
+ * Dubplate-Showdown-TRPG
+ * 
+ * 
+ * @author Dan Jones
+ * @version 1.0.5
+ * Copyright 2017. MIT licensed.
+ */
 //opens the bundle
 document.addEventListener('DOMContentLoaded', function() {
 
